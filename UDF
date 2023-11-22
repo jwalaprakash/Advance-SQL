@@ -1,0 +1,192 @@
+use test;
+
+-- 1st UDF
+DELIMITER $$
+CREATE FUNCTION ADD_NUM(a INT, b INT) 
+RETURNS INT 
+DETERMINISTIC
+BEGIN 
+    RETURN a + b; 
+END $$
+
+DELIMITER ;
+
+-- call the addition function
+SELECT ADD_NUM(10, 12);
+
+############################################################
+-- 2nd UDF Example
+
+DELIMITER //
+
+CREATE FUNCTION CALCULATE_YEAR_WORKED(hire_date DATE) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE years_worked INT;
+    SET years_worked = TIMESTAMPDIFF(YEAR, hire_date, CURDATE());
+    RETURN years_worked;
+END//
+
+DELIMITER ;
+
+#######################################################
+-- Actual working of UDF, 3RD UDF
+
+CREATE TABLE employees (
+    employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_name VARCHAR(255),
+    hire_date DATE
+);
+
+INSERT INTO employees (employee_name, hire_date) VALUES
+    ('John Doe', '2000-01-01'),
+    ('Jane Smith', '2005-02-15'),
+    -- insert other rows here
+    ('Michael Johnson', '2018-07-10');
+    
+    select * from employees;
+
+DELIMITER //
+
+CREATE FUNCTION CALCULATE_YEARS_WORKED(hire_date DATE) 
+    RETURNS INT
+    DETERMINISTIC
+    BEGIN
+        DECLARE today DATE;
+        DECLARE years_worked INT;
+        SET today = CURDATE();
+        SET years_worked = TIMESTAMPDIFF(YEAR, hire_date, today);
+        RETURN years_worked;
+    END//
+
+DELIMITER ;
+
+-- 1st query
+SELECT employee_name, hire_date, CALCULATE_YEARS_WORKED(hire_date) AS years_worked
+FROM employees;
+
+-- 2nd query 
+with cte as (
+SELECT employee_name, hire_date, CALCULATE_YEARS_WORKED(hire_date) AS years_worked,
+rank() over( order by CALCULATE_YEARS_WORKED(hire_date) desc) as ranks
+FROM employees
+)
+
+select * 
+from cte where ranks = 2;
+
+##########################################################
+-- 4th udf
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255),
+    unit_price DECIMAL(10, 2),
+    quantity INT
+);
+
+INSERT INTO orders (product_name, unit_price, quantity) VALUES
+    ('Product A', 10.50, 5),
+    ('Product B', 15.25, 3),
+    ('Product C', 8.75, 7);
+
+-- creating udf    
+DELIMITER //
+
+CREATE FUNCTION CALCULATE_TOTAL_PRICE(price DECIMAL(10, 2), qty INT) 
+    RETURNS DECIMAL(10, 2)
+    DETERMINISTIC
+    BEGIN
+        DECLARE total_price DECIMAL(10, 2);
+        SET total_price = price * qty;
+        RETURN total_price;
+    END//
+
+DELIMITER ;    
+
+SELECT 
+    product_name, 
+    unit_price, 
+    quantity, 
+    CALCULATE_TOTAL_PRICE(unit_price, quantity) AS total_price 
+FROM orders;
+
+select * , unit_price*quantity from orders;
+
+#####################################################
+-- udf 5, to calculate factorial
+
+DELIMITER $$
+CREATE FUNCTION CALCULATE_FACTORIAL(n INT) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fact INT DEFAULT 1;
+    DECLARE i INT DEFAULT 1;
+    WHILE i <= n DO
+        SET fact = fact * i;
+        SET i = i + 1;
+    END WHILE;
+    RETURN fact;
+END$$
+DELIMITER ;
+
+SELECT CALCULATE_FACTORIAL(3);
+
+###############################################
+-- UDF 6 to calculate cumulative revenue
+
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sale_date DATE,
+    revenue INT
+);
+
+INSERT INTO sales (sale_date, revenue) VALUES 
+('2023-10-01', 1000),
+('2023-10-02', 1500),
+('2023-10-03', 1200),
+('2023-10-04', 1800),
+('2023-10-05', 2000);
+
+DELIMITER $$
+CREATE FUNCTION CALCULATE_CUMULATIVE_REVENUE(row_id INT) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE cumulative_revenue INT;
+    SELECT SUM(revenue) INTO cumulative_revenue FROM sales WHERE id <= row_id;
+    RETURN cumulative_revenue;
+END$$
+DELIMITER ;
+
+ -- ----------------------############# lets Calculate cumulative revenue without UDF
+ 
+ CREATE TABLE sales1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255),
+    revenue INT
+);
+
+INSERT INTO sales1 (product_name, revenue) VALUES ('Product A', 1000);
+INSERT INTO sales1 (product_name, revenue) VALUES ('Product B', 1500);
+INSERT INTO sales1 (product_name, revenue) VALUES ('Product C', 1200);
+INSERT INTO sales1 (product_name, revenue) VALUES ('Product D', 800);
+INSERT INTO sales1 (product_name, revenue) VALUES ('Product E', 2000);
+
+-- M1 , without a new column
+SET @cumulative_sum := 0;
+SELECT id, revenue, @cumulative_sum := @cumulative_sum + revenue AS cumulative_revenue
+FROM sales1
+ORDER BY id;
+
+SELECT * FROM sales1;
+
+-- M2 by inserting a new column and then 
+ALTER TABLE sales1 ADD COLUMN cumulative_revenue DECIMAL(10, 2) DEFAULT 0;
+SET @cumulative_sum := 0;
+
+UPDATE sales1 
+SET cumulative_revenue = (@cumulative_sum := @cumulative_sum + revenue) 
+ORDER BY id;
