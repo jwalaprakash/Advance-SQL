@@ -1,0 +1,151 @@
+-- (1) TIMESTAMPDIFF
+-- TIMESTAMPDIFF is a function in SQL that calculates the difference between two date or timestamp
+--  values and returns the result in a specified unit (such as years, months, days, hours, minutes, or seconds).
+-- SYNTAX : TIMESTAMPDIFF(unit, start_timestamp, end_timestamp)
+
+SELECT TIMESTAMPDIFF(YEAR, STR_TO_DATE('1991-09-18', '%Y-%m-%d'), CURDATE()) AS Age;
+
+###########################################################################################
+-- (2) To calculate age in Years, Months and Days
+SELECT 
+    TIMESTAMPDIFF(YEAR, STR_TO_DATE('1991-09-18', '%Y-%m-%d'), CURDATE()) AS Years,
+    TIMESTAMPDIFF(MONTH, STR_TO_DATE('1991-09-18', '%Y-%m-%d'), CURDATE()) % 12 AS Months,
+    TIMESTAMPDIFF(DAY, STR_TO_DATE('1991-09-18', '%Y-%m-%d'), CURDATE()) % 30 AS Days;
+    
+
+###########################################################################################
+-- (3)
+-- The STR_TO_DATE function in SQL is used to convert a string into a date. This function can be
+-- particularly helpful when you have dates stored as strings in your database and you need to
+-- convert them to a proper date format.
+-- The function takes two parameters: the string representing the date and the format of the date.
+-- The function then converts the string into a date according to the provided format.
+
+-- What are all different types of format specifier in STR_TO_DATE format
+ -- ChatGPT
+-- In the STR_TO_DATE function of MySQL, you can use various format specifiers to specify the format of the date string. Some commonly used format specifiers include:
+
+-- %Y: Year as a four-digit number
+-- %y: Year as a two-digit number
+-- %m: Month as a two-digit number
+-- %d: Day of the month as a two-digit number
+-- %H: Hour as a two-digit number in the range 00 to 23
+-- %h: Hour as a two-digit number in the range 01 to 12
+-- %i: Minutes as a two-digit number
+-- %s: Seconds as a two-digit number
+-- %p: AM or PM
+-- %W: Weekday name
+-- %M: Month name
+-- %c: Month as a numeric value
+
+
+
+SELECT STR_TO_DATE('1991-09-18', '%Y-%m-%d') AS DateOfBirth;
+
+SELECT STR_TO_DATE('November 1, 2023', '%M %e, %Y') AS DateOfBirth;
+
+-- %Y: Represents the year in 4-digit format.
+SELECT STR_TO_DATE('2023-11-01', '%Y-%m-%d');
+
+-- %y: Represents the year in 2-digit format.
+SELECT STR_TO_DATE('23-11-01', '%y-%m-%d');
+
+-- %m: Represents the month in 2-digit format.
+SELECT STR_TO_DATE('2023-11-01', '%Y-%m-%d');
+
+-- %M: Represents the month as a name.
+SELECT STR_TO_DATE('November 1, 2023', '%M %e, %Y');
+
+-- %c: Represents the month in numeric format without leading zeros.
+SELECT STR_TO_DATE('2023-11-01', '%Y-%c-%d');
+
+-- %d: Represents the day of the month with leading zeros.
+SELECT STR_TO_DATE('2023-11-01', '%Y-%m-%d');
+
+-- %e: Represents the day of the month without leading zeros.
+SELECT STR_TO_DATE('2023-11-1', '%Y-%m-%e');
+
+-- %H: Represents the hour in 24-hour format with leading zeros.
+SELECT STR_TO_DATE('2023-11-01 14:30:00', '%Y-%m-%d %H:%i:%s');
+
+-- %i: Represents the minutes with leading zeros.
+SELECT STR_TO_DATE('2023-11-01 14:30:00', '%Y-%m-%d %H:%i:%s');
+
+-- %S: Represents the seconds with leading zeros.
+SELECT STR_TO_DATE('2023-11-01 14:30:15', '%Y-%m-%d %H:%i:%S');
+
+###################################################################################
+-- EXTRACT(unit FROM date)
+-- MICROSECOND	SECOND	MINUTE	HOUR	DAY	WEEK	MONTH	QUARTER	YEAR	SECOND_MICROSECOND	
+-- MINUTE_MICROSECOND	MINUTE_SECOND	HOUR_MICROSECOND	HOUR_SECOND	HOUR_MINUTE	DAY_MICROSECOND	DAY_SECOND	DAY_MINUTE	DAY_HOUR	YEAR_MONTH
+
+SELECT EXTRACT(YEAR FROM CURDATE());
+
+SELECT EXTRACT(HOUR_MINUTE FROM '2023-11-01 15:25:00');
+
+SELECT EXTRACT(YEAR FROM '1991-09-18') - EXTRACT(YEAR FROM CURDATE()) AS YearDifference;
+
+
+##############################################################
+-- DATE_ADD()
+SELECT NOW();
+
+SELECT DATE_ADD(NOW(), INTERVAL 10 DAY) AS FutureDate;
+
+SELECT DATE_ADD(NOW(), INTERVAL 5 HOUR) AS FutureDateTime;
+
+##############################################################
+-- The DATE_SUB() function in MySQL is used to subtract a time/date interval from a specified date
+
+SELECT DATE_SUB(NOW(), INTERVAL 5 HOUR) AS EarlierDateTime;
+
+SELECT DATE_SUB('2023-11-01', INTERVAL 2 DAY) AS EarlierDate;
+
+SELECT DATE_SUB('2023-11-01', INTERVAL 3 MONTH) AS EarlierDate;
+
+SELECT DATE_SUB(NOW(), INTERVAL 1 YEAR) AS EarlierDate;
+
+##############################################################################
+
+-- MySQL doesn't have a direct equivalent to the DATE_TRUNC function. However, 
+-- you can achieve similar results by using date functions like DATE_FORMAT in MySQL.
+
+SELECT DATE_FORMAT('2023-10-31 23:54:42', '%Y-%m-%d %H:00:00') AS TruncatedHour;
+
+SELECT DATE_FORMAT('2023-10-31 23:54:42', ' %H') AS TruncatedHour;
+
+#########################################################################################
+-- -- The DATE_FORMAT function in MySQL is used to format dates or date parts as per the specified format.
+-- It can be used to convert date or time into a specific format such as year, month, day, hour, minute, 
+-- or second. You can use various format specifiers to achieve your desired output.
+
+SELECT DATE_FORMAT('2023-10-31 23:54:42', '%W, %M %e, %Y') AS FormattedDate;
+
+-- This would give the result 'Tuesday, October 31, 2023'. 
+
+-- The format specifiers are as follows:
+-- %W: Weekday name
+-- %M: Month name
+-- %e: Day of the month
+-- %Y: Year
+--  Format specifiers you can use in the DATE_FORMAT function in MySQL:
+-- These format specifiers are helpful in customizing the date format according to your requirements.
+
+%Y: Year as a four-digit number
+%y: Year as a two-digit number
+%m: Month as a two-digit number
+%c: Month as a numeric value
+%d: Day of the month as a two-digit number
+%e: Day of the month as a number
+%H: Hour (00 to 23)
+%k: Hour (0 to 23)
+%h: Hour (01 to 12)
+%I: Hour (01 to 12)
+%i: Minutes as a two-digit number
+%s: Seconds as a two-digit number
+%T: Time in 24-hour format (hh:mm:ss)
+%r: Time in 12-hour format (hh:mm:ss AM/PM)
+%p: AM or PM
+
+-- eg
+SELECT STR_TO_DATE('91-september-18', '%y-%M-%d');
