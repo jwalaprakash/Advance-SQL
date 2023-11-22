@@ -1,0 +1,197 @@
+create database department;
+use  department;
+
+-- Create the employee table
+CREATE TABLE employee (
+    employee_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    hire_date DATE NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
+    department VARCHAR(50), -- Add the department column
+    PRIMARY KEY (employee_id)
+);
+
+-- Insert 50 rows into the employee table with a maximum of 6 different departments
+INSERT INTO employee (first_name, last_name, email, hire_date, salary, department)
+VALUES
+('John', 'Doe', 'john.doe@example.com', '2023-01-01', 50000.00, 'IT'),
+('Alice', 'Smith', 'alice.smith@example.com', '2023-02-15', 55000.00, 'Sales'),
+('Michael', 'Johnson', 'michael.johnson@example.com', '2023-03-10', 60000.00, 'HR'),
+('Emily', 'Brown', 'emily.brown@example.com', '2023-04-05', 48000.00, 'Marketing'),
+('David', 'Lee', 'david.lee@example.com', '2023-05-20', 52000.00, 'Finance'),
+('Jessica', 'Clark', 'jessica.clark@example.com', '2023-06-12', 53000.00, 'IT'),
+('Daniel', 'Evans', 'daniel.evans@example.com', '2023-07-25', 51000.00, 'Sales'),
+('Olivia', 'Johnson', 'olivia.johnson@example.com', '2023-08-30', 54000.00, 'HR'),
+('William', 'Miller', 'william.miller@example.com', '2023-09-14', 49000.00, 'Marketing'),
+('Ava', 'Hall', 'ava.hall@example.com', '2023-10-05', 47000.00, 'Finance'),
+('Liam', 'Thompson', 'liam.thompson@example.com', '2023-11-18', 58000.00, 'IT'),
+('Sophia', 'Baker', 'sophia.baker@example.com', '2023-12-22', 56000.00, 'Sales'),
+('Benjamin', 'Young', 'benjamin.young@example.com', '2024-01-07', 57000.00, 'HR'),
+('Emma', 'Anderson', 'emma.anderson@example.com', '2024-02-19', 59000.00, 'Marketing'),
+('James', 'Hill', 'james.hill@example.com', '2024-03-25', 60000.00, 'Finance'),
+('Amelia', 'Fisher', 'amelia.fisher@example.com', '2024-04-14', 51000.00, 'IT'),
+('Lucas', 'Barnes', 'lucas.barnes@example.com', '2024-05-28', 53000.00, 'Sales'),
+('Mia', 'Evans', 'mia.evans@example.com', '2024-06-30', 49000.00, 'HR'),
+('Alexander', 'Collins', 'alexander.collins@example.com', '2024-07-12', 52000.00, 'Marketing'),
+('Charlotte', 'Green', 'charlotte.green@example.com', '2024-08-17', 48000.00, 'Finance'),
+('Elijah', 'Baker', 'elijah.baker@example.com', '2024-09-05', 55000.00, 'IT'),
+('Ava', 'Ward', 'ava.ward@example.com', '2024-10-09', 51000.00, 'Sales'),
+('Logan', 'Nelson', 'logan.nelson@example.com', '2024-11-14', 54000.00, 'HR'),
+('Grace', 'Campbell', 'grace.campbell@example.com', '2024-12-20', 57000.00, 'Marketing'),
+('Henry', 'Garcia', 'henry.garcia@example.com', '2025-01-22', 46000.00, 'Finance'),
+('Luna', 'White', 'luna.white@example.com', '2025-02-18', 59000.00, 'IT'),
+('Jackson', 'Martin', 'jackson.martin@example.com', '2025-03-08', 52000.00, 'Sales'),
+('Chloe', 'Foster', 'chloe.foster@example.com', '2025-04-16', 51000.00, 'HR'),
+('Ethan', 'Parker', 'ethan.parker@example.com', '2025-05-25', 54000.00, 'Marketing'),
+('Zoe', 'Cooper', 'zoe.cooper@example.com', '2025-06-30', 48000.00, 'Finance'),
+('Liam', 'Ward', 'liam.ward@example.com', '2025-07-10', 56000.00, 'IT'),
+('Ella', 'Gonzalez', 'ella.gonzalez@example.com', '2025-08-20', 55000.00, 'Sales'),
+('Mason', 'Lopez', 'mason.lopez@example.com', '2025-09-02', 59000.00, 'HR'),
+('Aria', 'Howard', 'aria.howard@example.com', '2025-10-11', 50000.00, 'Marketing'),
+('Noah', 'Ward', 'noah.ward@example.com', '2025-11-21', 53000.00, 'Finance'),
+('Mila', 'Nelson', 'mila.nelson@example.com', '2025-12-04', 57000.00, 'IT'),
+('James', 'Garcia', 'james.garcia@example.com', '2026-01-15', 49000.00, 'Sales'),
+('Liam', 'Barnes', 'liam.barnes@example.com', '2026-02-26', 52000.00, 'HR'),
+('Ella', 'Lee', 'ella.lee@example.com', '2026-03-17', 55000.00, 'Marketing'),
+('Oliver', 'Perez', 'oliver.perez@example.com', '2026-04-29', 48000.00, 'Finance'),
+('Sophia', 'Hill', 'sophia.hill@example.com', '2026-05-08', 56000.00, 'IT'),
+('Lucas', 'Stewart', 'lucas.stewart@example.com', '2026-06-19', 53000.00, 'Sales'),
+('Chloe', 'Baker', 'chloe.baker@example.com', '2026-07-30', 51000.00, 'HR'),
+('Ethan', 'Robinson', 'ethan.robinson@example.com', '2026-08-11', 55000.00, 'Marketing'),
+('Zoe', 'Rivera', 'zoe.rivera@example.com', '2026-09-22', 54000.00, 'Finance'),
+('Luna', 'Wright', 'luna.wright@example.com', '2026-10-03', 58000.00, 'IT'),
+('Mason', 'Bennett', 'mason.bennett@example.com', '2026-11-14', 57000.00, 'Sales'),
+('Aria', 'Carter', 'aria.carter@example.com', '2026-12-26', 59000.00, 'HR');
+
+-- Additional employee inserts
+INSERT INTO employee (first_name, last_name, email, hire_date, salary, department)
+VALUES
+('Samuel', 'Smith', 'samuel.smith@example.com', '2023-01-15', 5000.00, 'IT'),
+('Jennifer', 'Johnson', 'jennifer.johnson@example.com', '2023-03-05', 60000.00, 'IT'),
+('Sophia', 'Davis', 'sophia.davis@example.com', '2023-04-10', 55000.00, 'IT'),
+('William', 'Wilson', 'william.wilson@example.com', '2023-02-20', 52000.00, 'IT'),
+('Mia', 'Brown', 'mia.brown@example.com', '2023-03-25', 52000.00, 'IT'),
+('Ava', 'Martinez', 'ava.martinez@example.com', '2023-04-15', 60000.00, 'IT'),
+('Lucas', 'Rodriguez', 'lucas.rodriguez@example.com', '2023-02-28', 48000.00, 'Sales'),
+('Daniel', 'Garcia', 'daniel.garcia@example.com', '2023-05-10', 48000.00, 'Sales'),
+('Olivia', 'Perez', 'olivia.perez@example.com', '2023-06-01', 57000.00, 'Sales'),
+('Emma', 'Smith', 'emma.smith@example.com', '2023-05-12', 49000.00, 'Sales'),
+('Ethan', 'Johnson', 'ethan.johnson@example.com', '2023-07-20', 49000.00, 'Sales'),
+('Isabella', 'Taylor', 'isabella.taylor@example.com', '2023-08-15', 49000.00, 'Sales'),
+('Liam', 'Hernandez', 'liam.hernandez@example.com', '2023-07-10', 55000.00, 'HR'),
+('Oliver', 'Harris', 'oliver.harris@example.com', '2023-09-01', 60000.00, 'HR'),
+('Chloe', 'Anderson', 'chloe.anderson@example.com', '2023-10-18', 55000.00, 'HR'),
+('Mason', 'Martin', 'mason.martin@example.com', '2023-09-15', 54000.00, 'HR'),
+('Sophia', 'Smith', 'sophia.smith@example.com', '2023-11-02', 54000.00, 'HR'),
+('Harper', 'Clark', 'harper.clark@example.com', '2023-12-10', 54000.00, 'HR'),
+('Jackson', 'Moore', 'jackson.moore@example.com', '2023-11-25', 52000.00, 'Marketing'),
+('Luna', 'Wright', 'luna.wright@example.com', '2024-01-15', 52000.00, 'Marketing'),
+('Sebastian', 'Hall', 'sebastian.hall@example.com', '2024-02-28', 59000.00, 'Marketing'),
+('Ella', 'Brown', 'ella.brown@example.com', '2024-01-20', 53000.00, 'Marketing'),
+('Lucas', 'Smith', 'lucas.smith@example.com', '2024-03-05', 53000.00, 'Marketing'),
+('Aria', 'Hernandez', 'aria.hernandez@example.com', '2024-04-10', 53000.00, 'Marketing'),
+('Logan', 'Wilson', 'logan.wilson@example.com', '2024-03-15', 56000.00, 'Finance'),
+('Zoe', 'Taylor', 'zoe.taylor@example.com', '2024-05-01', 56000.00, 'Finance'),
+('Aiden', 'Robinson', 'aiden.robinson@example.com', '2024-06-15', 60000.00, 'Finance'),
+('Harper', 'Davis', 'harper.davis@example.com', '2024-05-18', 57000.00, 'Finance');
+
+
+select * from employee;
+
+########################################################################
+-- employees with highest salary from each dept.
+WITH RankedEmployees AS (
+    SELECT
+        employee_id,
+        first_name,
+        last_name,
+        department,
+        salary,
+        dense_rank() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_
+    FROM employee
+)
+SELECT *
+FROM RankedEmployees
+WHERE rank_ <= 2;
+
+######################################################################
+-- highest salary employee
+SELECT *
+FROM employee
+ORDER BY salary DESC
+LIMIT 1;  -- it will not give the correct answer
+
+SELECT *
+FROM employee
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM employee
+);
+
+with rankedemployyee as (
+select *, dense_rank() over( order by salary desc ) as rank_ from employee
+) 
+
+select * from rankedemployyee
+where rank_ = 1 ;
+
+##########################################################################################
+-- 2nd highest salary
+
+SELECT *
+FROM employee
+WHERE salary = (
+    SELECT DISTINCT salary
+    FROM employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+);
+
+-- using cte
+WITH RankedEmployees AS (
+    SELECT
+        employee_id,
+        first_name,
+        last_name,
+        salary,
+        DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employee
+)
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary
+FROM RankedEmployees
+WHERE salary_rank = 2;
+
+
+-- 2nd highest salary from each department
+WITH RankedEmployees AS (
+    SELECT *,
+	DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank
+    FROM employee
+)
+SELECT *
+FROM RankedEmployees
+WHERE salary_rank = 2;
+
+############################################################################
+-- 2nd lowest salary
+SELECT *
+FROM employee
+ORDER BY salary
+LIMIT 1 OFFSET 1;
+
+
+WITH RankedEmployees AS (
+    
+	SELECT *, DENSE_RANK() OVER (ORDER BY salary) AS salary_rank
+    FROM employee
+)
+
+SELECT *
+FROM RankedEmployees
+WHERE salary_rank = 2;
