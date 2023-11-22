@@ -1,0 +1,71 @@
+create database joins_practice;
+use joins_practice;
+
+create table test1(
+ a int, 
+ b int
+ );
+
+insert into test1 values(10, 1);
+insert into test1 values(10, 2);
+insert into test1 values(20, 3);
+insert into test1 values(30, 5);
+insert into test1 values(30, 6);
+insert into test1 values(40,41);
+insert into test1 values(50, 7);
+
+
+create table test2( c int, d int);
+
+insert into test2 values(1000, 100);
+insert into test2 values(50, 101);
+insert into test2 values(30, 102);
+insert into test2 values(40, 103);
+insert into test2 values(40, 104);
+insert into test2 values(30, 105);
+
+select * from test1;
+select * from test2;
+
+-- (1)inner join / no of record should come 7
+select x.a, x.b,y.c,y.d
+from test1 as x
+inner join test2 as y on x.a = y.c; 
+
+
+-- (2)left join / The LEFT JOIN keyword returns all records from the left table (table1), and the matching records (if any) from the right table (table2). = 10
+
+select x.a, x.b,y.c,y.d
+from test1 as x
+left join test2 as y on x.a = y.c; 
+
+-- (3)right join / The RIGHT JOIN keyword returns all records from the right table (table2), and the matching records (if any) from the left table = 8
+
+
+select x.a, x.b,y.c,y.d
+from test1 as x
+right join test2 as y on x.a = y.c; 
+
+-- (4) cross join 
+
+select x.a, x.b,y.c,y.d
+from test1 as x
+cross join test2 as y ;
+
+-- (5)full join or full outer join
+
+
+select x.a, x.b, y.c, y.d
+from test1 as x
+FULL OUTER JOIN test2 as y on x.a = y.c
+
+## It's important to note that MySQL does not support FULL OUTER JOIN directly. 
+## You can achieve the same result using a combination of a LEFT JOIN and a UNION with a RIGHT JOIN, like this:
+
+SELECT x.a, x.b,y.c,y.d
+from test1 as x
+LEFT JOIN test2 as y on x.a = y.c 
+UNION
+SELECT x.a, x.b,y.c,y.d
+from test1 as x
+RIGHT JOIN test2 as y on x.a = y.c 
