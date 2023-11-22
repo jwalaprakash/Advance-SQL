@@ -22,7 +22,7 @@ SELECT
 -- The function then converts the string into a date according to the provided format.
 
 -- What are all different types of format specifier in STR_TO_DATE format
- -- ChatGPT
+
 -- In the STR_TO_DATE function of MySQL, you can use various format specifiers to specify the format of the date string. Some commonly used format specifiers include:
 
 -- %Y: Year as a four-digit number
