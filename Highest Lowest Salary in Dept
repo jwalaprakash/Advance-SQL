@@ -195,3 +195,52 @@ WITH RankedEmployees AS (
 SELECT *
 FROM RankedEmployees
 WHERE salary_rank = 2;
+
+##################################################################################################
+-- Interview Question 1
+-- SQL query to update the salary of an employee in a specific department
+
+UPDATE employees
+SET salary = new_salary
+WHERE department_id = specific_department_id
+  AND employee_id = specific_employee_id;
+
+###################################################################################################
+-- Interview Question 2
+-- top five employee based on their performance or salary 
+SELECT
+  employee_id, salary, department
+FROM employee
+ORDER BY salary DESC
+LIMIT 5;
+
+-- top five employee based on their performance or salary from each department
+
+WITH RankedEmployees AS (
+  SELECT employee_id, salary, department,
+    ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rowrank_in_department
+  FROM employee
+)
+SELECT
+  employee_id, salary, department, rowrank_in_department, rank_in_department, drank_in_department
+FROM
+  RankedEmployees
+WHERE
+  rank_in_department <= 5;
+
+-- compare 3 window function togeather with partition
+select *, 
+ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rowrank_in_department,
+rank() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_in_department,
+dense_rank() OVER (PARTITION BY department ORDER BY salary DESC) AS drank_in_department
+FROM employee;
+
+-- compare 3 window function togeather without partition
+select *, 
+ROW_NUMBER() OVER ( ORDER BY salary DESC) AS rowrank_in_department,
+rank() OVER (ORDER BY salary DESC) AS rank_in_department,
+dense_rank() OVER (ORDER BY salary DESC) AS drank_in_department
+FROM employee;
+
+##################################################################################
+
