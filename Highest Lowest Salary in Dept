@@ -200,21 +200,21 @@ WHERE salary_rank = 2;
 -- Interview Question 1
 -- SQL query to update the salary of an employee in a specific department
 
-UPDATE employees
+UPDATE employee
 SET salary = new_salary
 WHERE department_id = specific_department_id
   AND employee_id = specific_employee_id;
 
 ###################################################################################################
 -- Interview Question 2
--- top five employee based on their performance or salary 
+-- top five employee based on their salary 
 SELECT
   employee_id, salary, department
 FROM employee
 ORDER BY salary DESC
 LIMIT 5;
 
--- top five employee based on their performance or salary from each department
+-- top five employee based on their salary from each department
 
 WITH RankedEmployees AS (
   SELECT employee_id, salary, department,
