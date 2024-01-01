@@ -7,10 +7,10 @@ BEGIN
 END //
 DELIMITER ;
 
+-- CALL THE PROCEDURE
+CALL GetCustomer(
 
 ##################################### Best example of stored procedure
---link  
-https://chat.openai.com/share/f8acb3f6-dc3e-47f9-bcbf-ef538b8b1b2c
 
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
