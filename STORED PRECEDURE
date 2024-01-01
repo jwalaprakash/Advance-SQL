@@ -8,7 +8,7 @@ END //
 DELIMITER ;
 
 -- CALL THE PROCEDURE
-CALL GetCustomer(
+CALL GetCustomer(100);
 
 ##################################### Best example of stored procedure
 
