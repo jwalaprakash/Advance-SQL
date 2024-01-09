@@ -1,0 +1,213 @@
+create database storedp;
+use storedp;
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Department VARCHAR(50),
+    Position VARCHAR(50),
+    Salary DECIMAL(10, 2),
+    HireDate DATE
+);
+
+select * from Employees;
+
+INSERT INTO Employees VALUES
+(1, 'John', 'Doe', 'IT', 'Developer', 75000.00, '2022-01-15'),
+(2, 'Jane', 'Smith', 'HR', 'Manager', 90000.00, '2021-05-20'),
+(3, 'Michael', 'Johnson', 'Sales', 'Sales Representative', 80000.00, '2022-03-10'),
+(4, 'Emily', 'Jones', 'IT', 'System Analyst', 85000.00, '2021-11-05'),
+(5, 'David', 'Brown', 'Finance', 'Financial Analyst', 82000.00, '2022-02-28'),
+(6, 'Amanda', 'Clark', 'Marketing', 'Marketing Specialist', 78000.00, '2021-09-15'),
+(7, 'Daniel', 'Taylor', 'HR', 'HR Coordinator', 76000.00, '2022-04-22'),
+(8, 'Sophia', 'Williams', 'Sales', 'Sales Manager', 95000.00, '2021-08-10'),
+(9, 'Oliver', 'Anderson', 'IT', 'Database Administrator', 89000.00, '2022-06-18'),
+(10, 'Emma', 'Miller', 'Finance', 'Finance Manager', 92000.00, '2021-12-03'),
+(11, 'Liam', 'Moore', 'Marketing', 'Marketing Manager', 98000.00, '2022-05-12'),
+(12, 'Ella', 'Turner', 'IT', 'Software Engineer', 82000.00, '2022-09-08'),
+(13, 'William', 'Cooper', 'Sales', 'Sales Associate', 77000.00, '2022-10-17'),
+(14, 'Ava', 'Baker', 'HR', 'Recruiter', 79000.00, '2021-07-30'),
+(15, 'Henry', 'Ward', 'Finance', 'Accountant', 86000.00, '2022-01-05'),
+(16, 'Mia', 'Fisher', 'IT', 'Network Administrator', 90000.00, '2021-03-25'),
+(17, 'Noah', 'Johnson', 'Marketing', 'Graphic Designer', 74000.00, '2022-11-28'),
+(18, 'Isabella', 'Wright', 'Sales', 'Senior Sales Manager', 105000.00, '2021-06-14'),
+(19, 'James', 'Lee', 'IT', 'IT Manager', 110000.00, '2021-04-12'),
+(20, 'Scarlett', 'Taylor', 'Finance', 'Financial Controller', 100000.00, '2022-08-03');
+
+select * from employees;
+-- Let's start with the simplest one.
+-- Q1 Write a Stored Procedure to Retrieve All Employees
+
+DELIMITER //
+create procedure emp_details()
+begin
+select * from employees;
+
+end //
+DELIMITER ;
+
+CALL emp_details();
+
+
+-- Q2 Write a Stored Procedure to retrieve employee by department
+
+delimiter // 
+create procedure emp_by_dept( in x varchar(50)) 		-- x is a variable that will take Department as input
+begin 
+
+select * from employees where Department = x ;
+end //
+delimiter ;
+
+call emp_by_dept('it');  		-- call procedure name (" give input ")
+
+-- Q3 Write a Stored Procedure to Update Employee Salary
+
+delimiter // 
+create procedure update_emp( in x int, in y int )  -- x = imp_id , y = new salary
+begin
+update employees set salary =  y  where EmployeeID = x ;
+
+end//
+delimiter ;
+
+call update_emp( 1, 999 ); 					-- before calling this procedure , check for EmployeeID 1 salary is 75000.00
+select * from employees;					-- After this salary will get updated to 999, and we dont have to write update command.
+
+#########################################################################
+-- Q4  Calculate Average Salary by Department
+
+DELIMITER // 
+CREATE procedure avg_sal( in x varchar(50))
+begin 
+select avg(salary) from employees where Department = x ;
+end //
+delimiter ;
+
+call avg_sal('HR');
+SELECT avg(SALARY) FROM EMPLOYEES WHERE Department = 'HR';
+
+-- Lets use IN and OUT parameter M1
+
+delimiter //
+create procedure avg_sal_by_dept( IN X VARCHAR(50), OUT Y decimal(10,2) ) -- X = DEPT, Y = AVG SAL
+begin
+
+select avg(SALARY) into Y from employees WHERE Department = X ;
+
+END // 
+DELIMITER ;
+
+CALL avg_sal_by_dept('IT' , @AVRG);
+SELECT @AVRG;
+
+-- M2 Using in out both
+DELIMITER //
+
+CREATE PROCEDURE avg_sal_by_dept(IN X VARCHAR(50), OUT Y DECIMAL(10, 2))
+BEGIN
+    -- Use SELECT INTO to assign the result of the query to the OUT parameter
+    SELECT AVG(Salary) INTO Y FROM Employees WHERE Department = X;
+END //
+
+-- Reset the delimiter back to semicolon M2
+DELIMITER ;
+
+SET @DP = 'IT';
+call avg_sal_by_dept(@DP, @avgsalary);
+SELECT @avgsalary;
+
+###############################################################################
+-- Q5 Write a stored procedure to Retrieve Employees Hired After a Given Date:
+
+delimiter //
+create procedure hrd_emp_date(in x date) -- x is input date
+begin 
+select * from employees where  HireDate > x ; -- HireDate is a column in 
+end //
+delimiter ;
+
+call hrd_emp_date( '2022-01-01');
+
+select * from employees order by  HireDate; 
+
+-- ###############################################################################
+-- Q6 Write a stored procedure to  Retrieve Top N Highest Paid Employees:
+-- M1
+DELIMITER //
+CREATE PROCEDURE TOPN_SAL_EMP( IN X INT) 
+BEGIN
+select * from(
+select *, 
+row_number() over(order by salary desc) AS SAL_RANK from employees 
+) AS EMP_WD_RANK
+WHERE SAL_RANK <= X;
+END //
+DELIMITER ;
+
+CALL TOPN_SAL_EMP(5);
+
+-- M2 Using limit
+
+delimiter //
+create procedure ranked_emp( in x int )
+begin 
+select * from employees order by salary desc limit x ;
+ end //
+ delimiter ;
+ 
+ call ranked_emp(5);
+ 
+-- ###############################################################################
+-- Q7 Write a stored procedure to Delete Employee by ID:
+
+DELIMITER //
+CREATE procedure DEL_EMP ( IN X INT)
+BEGIN
+DELETE FROM employees where EmployeeID = x;
+END //
+DELIMITER ;
+
+CALL DEL_EMP(1);
+
+
+-- ###############################################################################
+-- Q8 Write a stored procedure to Transfer Employee to Another Department:( Its kind of update)
+
+DELIMITER // 
+CREATE procedure DPT_CNG( IN X int  , IN Y VARCHAR(50) ) -- HERE X is employeeid  and  y is department
+begin
+update employees 
+set Department = y where EmployeeID = x ;
+end //
+delimiter ;
+
+call DPT_CNG ( 3 , "sales manager");
+select * from employees;
+
+-- ###############################################################################
+-- Q8 Write a stored procedure to Calculate Total Salary Expense for a Department:
+
+DELIMITER //
+CREATE procedure SAL_EXPENSE( IN X varchar(50))
+BEGIN
+select sum(salary) as salary_expense from employees where department = X ;
+END //
+DELIMITER ;
+
+CALL SAL_EXPENSE ( 'HR');
+
+
+-- M2 , Lets try using in and out 
+
+DELIMITER //
+CREATE procedure SALARY_EXP( IN X varchar(50), OUT Y decimal(10,2))
+BEGIN
+select SUM(salary) into y from employees where department = X ;
+end //
+DELIMITER ;
+
+SET @DPT = 'HR';
+CALL SALARY_EXP (@DPT , @DEP_SAL_EXP);
+SELECT @DEP_SAL_EXP; 
